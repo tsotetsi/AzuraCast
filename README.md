@@ -1,21 +1,61 @@
-![](https://github.com/AzuraCast/AzuraCast/raw/main/resources/azuracast.png)![](https://static.scarf.sh/a.png?x-pxid=d5169ead-cdcf-482c-ab64-c7137d3f8769)
+<div align="center">
 
-# AzuraCast: A Simple, Self-Hosted Web Radio Management Suite
+  ![](https://github.com/AzuraCast/AzuraCast/raw/main/resources/azuracast.png)![](https://static.scarf.sh/a.png?x-pxid=d5169ead-cdcf-482c-ab64-c7137d3f8769)
 
-[![Build Status](https://github.com/azuracast/azuracast/workflows/Build,%20Test%20and%20Publish/badge.svg)](https://github.com/AzuraCast/AzuraCast/actions)
-[![Latest Stable Release](https://img.shields.io/packagist/v/azuracast/azuracast.svg?label=latest+stable+version)]()
-[![AGPL-3.0 License](https://img.shields.io/github/license/azuracast/azuracast.svg)]()
-[![Ethical Open Source](https://img.shields.io/badge/open-ethical-%234baaaa)](https://ethicalsource.dev/)
-[![Mastodon Follow](https://img.shields.io/mastodon/follow/000062116?domain=https%3A%2F%2Ffloss.social&style=social)](https://floss.social/@AzuraCast)
+</div>
 
-[![Built with Depot](https://depot.dev/badges/built-with-depot.svg)](https://depot.dev/?utm_source=AzuraCast)
+<div align="center">
+  <h4>
+    <span style="font-size: 2em;">AzuraCast:</span> <span style="font-size: 2em; font-style: italic;"> A Simple, Self-Hosted Web Radio Management Suite.</span>
+  </h4>
+</div>
+
+<div align="center">
+
+  [![Build Status](https://github.com/azuracast/azuracast/workflows/Build,%20Test%20and%20Publish/badge.svg)](https://github.com/AzuraCast/AzuraCast/actions)
+  [![Latest Stable Release](https://img.shields.io/packagist/v/azuracast/azuracast.svg?label=latest+stable+version)]()
+  [![AGPL-3.0 License](https://img.shields.io/github/license/azuracast/azuracast.svg)]()
+  [![Ethical Open Source](https://img.shields.io/badge/open-ethical-%234baaaa)](https://ethicalsource.dev/)
+  [![Mastodon Follow](https://img.shields.io/badge/Mastodon-Follow-563acc?style=social&logo=mastodon)](https://floss.social/@AzuraCast)
+
+  <hr>
+
+  [![Docker ready](https://img.shields.io/badge/Docker-ready-%232496ED.svg?logo=docker&logoColor=white)](https://www.azuracast.com/docs/getting-started/installation/#docker)
+  ![PHP](https://img.shields.io/badge/PHP-8.5-%23777BB4.svg?logo=php&logoColor=white)
+  ![MariaDB](https://img.shields.io/badge/MariaDB-11.4-%23003545.svg?logo=mariadb&logoColor=white)
+  ![Valkey](https://img.shields.io/badge/Valkey-8.1-%23FF4500.svg?logo=redis&logoColor=white)
+  [![Swagger UI](https://img.shields.io/badge/Swagger-UI-%2385EA2D.svg?logo=swagger&logoColor=white)](/api/docs)
+
+  ![Vue.js](https://img.shields.io/badge/Vue.js-3-%234FC08D.svg?logo=vuedotjs&logoColor=white)
+  ![TypeScript](https://img.shields.io/badge/TypeScript-5-%233178C6.svg?logo=typescript&logoColor=white)
+  ![Vite](https://img.shields.io/badge/Vite-7-%23646CFF.svg?logo=vite&logoColor=white)
+  ![Pinia](https://img.shields.io/badge/Pinia-3-%23FFD859.svg?logo=pinia&logoColor=black)
+  ![Vue Router](https://img.shields.io/badge/Vue%20Router-4-%234FC08D.svg?logo=vuedotjs&logoColor=white)
+  ![Bootstrap](https://img.shields.io/badge/Bootstrap-5-%237952B3.svg?logo=bootstrap&logoColor=white)
+  ![Chart.js](https://img.shields.io/badge/Chart.js-4-%23FF6384.svg?logo=chartdotjs&logoColor=white)
+  ![Axios](https://img.shields.io/badge/Axios-1-%235A29E4.svg?logo=axios&logoColor=white)
+</div>
+
+<hr>
+
+<div align="center">
+
+  [![Built with Depot](https://depot.dev/badges/built-with-depot.svg)](https://depot.dev/?utm_source=AzuraCast)
+
+</div>
+
+## What is AzuraCast?
 
 **AzuraCast** is a self-hosted, all-in-one web radio management suite. Using its easy installer and powerful but
 intuitive web interface, you can start up a fully working web radio station in a few quick minutes. AzuraCast works for
 web radio stations of all types and sizes, and is built to run on even the most affordable VPS web hosts. AzuraCast is
 currently beta software.
 
-![](https://www.azuracast.com/img/ScreenshotTour.gif)
+<div align="center">
+
+  ![](https://www.azuracast.com/img/ScreenshotTour.gif)
+
+</div>
 
 You can learn more about AzuraCast via our [Documentation](https://www.azuracast.com/docs):
 
