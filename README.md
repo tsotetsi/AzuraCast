@@ -150,6 +150,6 @@ We would like to thank the following organizations for their support of AzuraCas
 AzuraCast will always be available free of charge, but if you find the software useful and would like to support the
 project's lead developer, visit either of the links below. Your support is greatly appreciated.
 
-<a href="https://ko-fi.com/silvereagle" target="_blank" title="Buy me a coffee!"><img height='32' style='border:0px;height:32px;' src='https://az743702.vo.msecnd.net/cdn/kofi1.png?v=b' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+<a href="https://ko-fi.com/silvereagle" target="_blank" title="Buy me a coffee!"><img height='32' style='border:0px;height:32px;' src='https://storage.ko-fi.com/cdn/useruploads/1ef72789-aac5-4108-b031-0c230330a661_f5718240-7371-4db9-8164-8680b0251873.jpg' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
 <a href="https://www.patreon.com/bePatron?u=232463" target="_blank" title="Become a Patron"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png"></a>
