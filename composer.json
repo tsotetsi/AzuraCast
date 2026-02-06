@@ -57,6 +57,7 @@
     "mezzio/mezzio-session": "^1.17",
     "mezzio/mezzio-session-cache": "^1.17",
     "monolog/monolog": "^3.9",
+    "itspire/monolog-loki":"^2.0.0",
     "myclabs/deep-copy": "^1.13.4",
     "nesbot/carbon": "^3.10.3",
     "pagerfanta/doctrine-collections-adapter": "^4.7.2",

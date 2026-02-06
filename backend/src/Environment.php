@@ -77,6 +77,9 @@ final class Environment
     public const string REDIS_PORT = 'REDIS_PORT';
     public const string REDIS_DB = 'REDIS_DB';
 
+    // Loki Configuration Variables
+    public const string LOKI_URL = 'LOKI_URL';
+
     public function __construct(array $elements = [])
     {
         $this->baseDir = dirname(__DIR__, 2);
@@ -468,5 +471,9 @@ final class Environment
             self::IS_CLI => $existingEnv->isCli(),
             self::IS_DOCKER => $existingEnv->isDocker(),
         ]);
+    }
+    public function getLokiUrl(): ?string
+    {
+        return $this->data[self::LOKI_URL] ?? null;
     }
 }
