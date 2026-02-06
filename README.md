@@ -40,6 +40,18 @@
 
 <div align="center">
 
+  [![Loki](https://img.shields.io/badge/Loki-3.6.4-fab005?style=flat&logo=loki)](https://grafana.com/docs/loki/latest/)
+  [![Prometheus](https://img.shields.io/badge/prometheus-3.0.6-fab005?style=flat&logo=prometheus)](https://prometheus.io/docs/introduction/overview/)
+  [![Grafana](https://img.shields.io/badge/grafana-12.2-fab005?style=flat&logo=grafana)](https://grafana.com/docs/)
+  [![Promtail](https://img.shields.io/badge/Promtail-3.2.1-fab005?style=flat&logo=promtail)](https://grafana.com/docs/loki/latest/)
+  [![Grafana Alertmanager](https://img.shields.io/badge/Alertmanager-0.26.0-fab005?style=flat&logo=alertmanager)](https://prometheus.io/docs/alerting/latest/alertmanager/)
+
+<hr>
+
+</div>
+
+<div align="center">
+
   [![Built with Depot](https://depot.dev/badges/built-with-depot.svg)](https://depot.dev/?utm_source=AzuraCast)
 
 </div>
