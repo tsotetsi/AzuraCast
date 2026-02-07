@@ -1,0 +1,11 @@
+groups:
+  - name: MariaDBAlerts
+    rules:
+      - alert: MariaDBDown
+        expr: mysql_up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "MariaDB down"
+          description: "MySQL instance {{ $labels.instance }} is down"
