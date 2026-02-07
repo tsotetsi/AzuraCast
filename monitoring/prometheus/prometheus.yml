@@ -14,6 +14,16 @@ scrape_configs:
   # MariaDB.
   - job_name: 'mariadb'
     static_configs:
-      - targets: ['127.0.0.1:3306']
-        labels:
-          alias: 'db1'
+      - targets: ['web:9104']
+
+  - job_name: 'nginx'
+    static_configs:
+      - targets: ['web:9113']
+
+  - job_name: 'php-fpm'
+    static_configs:
+      - targets: ['web:9253']
+
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['web:9121']
