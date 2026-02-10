@@ -11,19 +11,20 @@ scrape_configs:
     static_configs:
       - targets: ["localhost:9090"]
     scrape_interval: 30s
+
   # MariaDB.
   - job_name: 'mariadb'
     static_configs:
-      - targets: ['web:9104']
+      - targets: ['mariadb-exporter:9104']
 
   - job_name: 'nginx'
     static_configs:
-      - targets: ['web:9113']
+      - targets: ['nginx-exporter:9113']
 
   - job_name: 'php-fpm'
     static_configs:
-      - targets: ['web:9253']
+      - targets: ['php-fpm-exporter:9253']
 
   - job_name: 'redis'
     static_configs:
-      - targets: ['web:9121']
+      - targets: ['redis-exporter:9121']
