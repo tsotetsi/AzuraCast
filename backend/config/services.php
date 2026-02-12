@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 use App\Environment;
 use App\Event;
-use Psr\Container\ContainerInterface;
 use Monolog\Handler\WhatFailureGroupHandler;
+use Psr\Container\ContainerInterface;
 
 return [
 
