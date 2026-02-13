@@ -22,3 +22,11 @@ services:
       - $PWD:/var/azuracast/www
     extra_hosts:
       - "host.docker.internal:host-gateway"
+      - "azuracast.local:127.0.0.1"
+    networks:
+      - azura-net
+
+networks:
+  azura-net:
+    name: azura-net
+    driver: bridge
