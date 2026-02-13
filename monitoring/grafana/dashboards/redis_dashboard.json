@@ -202,7 +202,7 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "expr": "rate(redis_total_commands_processed_total[1m])",
+                    "expr": "rate(redis_commands_processed_total[1m])",
                     "format": "time_series",
                     "interval": "",
                     "intervalFactor": 1,
