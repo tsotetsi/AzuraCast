@@ -46,7 +46,14 @@
   [![Promtail](https://img.shields.io/badge/Promtail-3.2.1-fab005?style=flat&logo=promtail)](https://grafana.com/docs/loki/latest/)
   [![Grafana Alertmanager](https://img.shields.io/badge/Alertmanager-0.26.0-fab005?style=flat&logo=alertmanager)](https://prometheus.io/docs/alerting/latest/alertmanager/)
 
-<hr>
+</div>
+
+<div align="center">
+
+  [![mariadb-exporter](https://img.shields.io/badge/mariadb--exporter-1.1.0-fab005?style=flat&logo=mariadb)](https://github.com/prometheus/mysqld_exporter)
+  [![redis-exporter](https://img.shields.io/badge/redis--exporter-1.1.0-fab005?style=flat&logo=redis)](https://github.com/oliver006/redis_exporter)
+  [![nginx-exporter](https://img.shields.io/badge/nginx--exporter-1.1.0-fab005?style=flat&logo=nginx)](https://github.com/prometheus/nginx_exporter)
+  [![php-fpm-exporter](https://img.shields.io/badge/php--fpm--exporter-1.1.0-fab005?style=flat&logo=php)](https://github.com/prometheus/php-fpm_exporter)
 
 </div>
 
