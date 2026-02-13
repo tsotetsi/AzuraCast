@@ -23,7 +23,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 6,
+  "id": 5,
   "links": [
     {
       "icon": "dashboard",
@@ -3369,5 +3369,5 @@
   "timezone": "browser",
   "title": "MySQL Overview",
   "uid": "MQWgroiiz",
-  "version": 2
+  "version": 1
 }
