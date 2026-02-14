@@ -49,7 +49,7 @@ scrape_configs:
           expression: '^\[(?P<timestamp>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\]'
       - timestamp:
           source: timestamp
-          format: '2025-01-02 14:04:25'
+          format: '2006-01-02 15:04:05'
       - labels:
           # Extract service name from filename (service_nginx.log -> nginx)
           service: '{{ regex "service_(?P<service>[^.]+)\.log" .__path__ | .service }}'
