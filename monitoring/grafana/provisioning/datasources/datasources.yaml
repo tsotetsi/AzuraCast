@@ -12,5 +12,7 @@ datasources:
     access: proxy
     url: http://loki:3100
     editable: true
-    json:
-      tenant_id: azuracast_local
+    jsonData:
+      httpHeaderName1: "X-Scope-OrgID"
+    secureJsonData:
+      httpHeaderValue1: "azuracast_local"
