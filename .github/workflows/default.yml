@@ -207,8 +207,8 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            azuracast/azuracast
-            ghcr.io/azuracast/azuracast
+            ${{ github.repository_owner }}/azuracast
+            ghcr.io/${{ github.repository_owner }}/azuracast
           flavor: |
             latest=false
           tags: |
