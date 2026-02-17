@@ -1,4 +1,4 @@
-auth_enabled: false # NB: Investigate why this fails if true
+auth_enabled: true # NB: Investigate why this fails if true
 
 server:
   http_listen_port: 3100
