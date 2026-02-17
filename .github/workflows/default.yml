@@ -128,25 +128,25 @@ jobs:
       - name: Generate new translations from existing code.
         run: |
           npm ci --include=dev
-          backend/bin/console locale:generate
+          # backend/bin/console locale:generate
 
-      - name: Pull latest translations.
-        uses: crowdin/github-action@v2.14.0
-        with:
-          upload_sources: true
-          download_translations: true
-          export_only_approved: false
-          push_translations: false
-          crowdin_branch_name: main
-          config: crowdin.yaml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
-          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+      # - name: Pull latest translations.
+      #   uses: crowdin/github-action@v2.14.0
+      #   with:
+      #     upload_sources: true
+      #     download_translations: true
+      #     export_only_approved: false
+      #     push_translations: false
+      #     crowdin_branch_name: main
+      #     config: crowdin.yaml
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+      #     CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 
       - name: Import locales, build static assets.
         run: |
-          backend/bin/console locale:import
+          # backend/bin/console locale:import
           npm run build
 
       - name: Build OpenAPI Docs
