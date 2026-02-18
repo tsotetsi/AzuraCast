@@ -1,0 +1,30 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "/etc/prometheus/rules/*.yml"
+
+scrape_configs:
+  # Prometheus itself.
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+    scrape_interval: 30s
+
+  # MariaDB.
+  - job_name: 'mariadb'
+    static_configs:
+      - targets: ['mariadb-exporter:9104']
+
+  - job_name: 'nginx'
+    static_configs:
+      - targets: ['nginx-exporter:9113']
+
+  - job_name: 'php-fpm'
+    static_configs:
+      - targets: ['php-fpm-exporter:9253']
+
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis-exporter:9121']

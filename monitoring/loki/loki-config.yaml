@@ -1,0 +1,49 @@
+auth_enabled: true # NB: Investigate why this fails if true
+
+server:
+  http_listen_port: 3100
+  grpc_listen_port: 9096
+  log_level: info  # Reduce noise; set to debug only when troubleshooting
+  grpc_server_max_concurrent_streams: 1000
+
+common:
+  path_prefix: /loki
+  replication_factor: 1
+  storage:
+    filesystem:
+      chunks_directory: /loki/chunks
+      rules_directory: /loki/rules
+  ring:
+    kvstore:
+      store: inmemory  # Simpler for single-node; avoids seed file issues
+
+query_range:
+  results_cache:
+    cache:
+      embedded_cache:
+        enabled: true
+        max_size_mb: 100
+
+limits_config:
+  metric_aggregation_enabled: true
+  enable_multi_variant_queries: true
+
+schema_config:
+  configs:
+    - from: "2026-01-01"
+      store: tsdb
+      object_store: filesystem
+      schema: v13
+      index:
+        prefix: index_
+        period: 24h
+
+ruler:
+  enable_api: true
+  alertmanager_url: http://alertmanager:9093  # Use service name if in compose network
+
+frontend:
+  encoding: protobuf
+
+analytics:
+  reporting_enabled: false  # Disable analytics in production

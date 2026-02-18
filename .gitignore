@@ -58,3 +58,6 @@ tmp/cache/*---*
 /plugins/*
 /plugins/**/*
 !/plugins/.gitkeep
+
+# Password file.
+monitoring/mariadb/mariadb_exporter_password.txt

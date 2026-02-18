@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 use App\Environment;
 use App\Event;
+use Monolog\Handler\WhatFailureGroupHandler;
 use Psr\Container\ContainerInterface;
 
 return [
@@ -330,6 +331,26 @@ return [
             true
         );
         $logger->pushHandler($logFile);
+
+        // Add Loki handler if LOKI_URL is set
+        if ($lokiUrl = $environment->getLokiUrl()) {
+            $serviceType = $environment->isCli() ? 'cli' : 'web';
+            $lokiHandler = new Itspire\MonologLoki\Handler\LokiHandler(
+                [
+                    'entrypoint' => $lokiUrl,
+                    'labels' => [
+                        'app' => $environment->getAppName(),
+                        'service' => $serviceType,
+                        'environment' => $environment->getAppEnvironmentEnum()->getName(),
+                    ],
+                ],
+                $loggingLevel
+            );
+            // Wrap Loki handler in WhatFailureGroupHandler for resilience
+            $logger->pushHandler(
+                new WhatFailureGroupHandler([$lokiHandler])
+            );
+        }
 
         return $logger;
     },
