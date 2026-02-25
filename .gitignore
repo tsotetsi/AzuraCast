@@ -45,9 +45,8 @@ tmp/cache/*---*
 /tests/_output/*
 
 # Docker files
-/docker-compose.yml
 /docker-compose.new.yml
-/docker-compose.override.yml
+docker-compose.override.yml
 /.env
 
 # Backups
