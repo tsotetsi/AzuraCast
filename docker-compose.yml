@@ -1,0 +1,53 @@
+services:
+  web:
+    build:
+      context: .
+    volumes:
+      - azuracast_stations:/var/azuracast/stations
+      - azuracast_backups:/var/azuracast/backups
+      - azuracast_storage:/var/azuracast/storage
+    environment:
+      ENABLE_REDIS: "true"
+      REDIS_HOST: keydb
+      MYSQL_HOST: mariadb
+    networks:
+      - azuracast_network
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
+  keydb:
+    image: eqalpha/keydb:latest
+    restart: unless-stopped
+    volumes:
+      - keydb_data:/data
+    networks:
+      - azuracast_network
+
+  mariadb:
+    image: mariadb:lts
+    restart: unless-stopped
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: azur4c457
+      MYSQL_DATABASE: azuracast
+      MYSQL_USER: azuracast
+      MYSQL_PASSWORD: azur4c457
+    networks:
+      - azuracast_network
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  keydb_data:
+  mariadb_data:
+  azuracast_stations:
+  azuracast_backups:
+  azuracast_storage:
+
+networks:
+  azuracast_network:

@@ -8,12 +8,15 @@ install: # Developer mode installation
 	bash ./docker.sh install-dev
 
 up:
-	docker compose up -d
+	docker compose up -d --remove-orphans
 
 down:
 	docker compose down
 
 restart: down up
+
+web-up:
+	docker compose up -d azuracast --remove-orphans
 
 build: # Rebuild all containers and restart
 	docker compose build
