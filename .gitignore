@@ -60,3 +60,6 @@ docker-compose.override.yml
 
 # Password file.
 monitoring/mariadb/mariadb_exporter_password.txt
+
+# IDE files
+.vscode/
