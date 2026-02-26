@@ -18,7 +18,10 @@ services:
         condition: service_healthy
 
   keydb:
-    image: eqalpha/keydb:latest
+    image: azuracast-keydb:latest
+    build:
+      context: ./util/docker/keydb
+      dockerfile: Dockerfile
     restart: unless-stopped
     volumes:
       - keydb_data:/data
