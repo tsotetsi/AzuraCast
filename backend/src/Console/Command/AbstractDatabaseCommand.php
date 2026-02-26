@@ -113,13 +113,10 @@ abstract class AbstractDatabaseCommand extends CommandAbstract
 
         if ($fs->exists($dbDumpPath)) {
             $io->info([
-                __('We detected a database restore file from a previous (possibly failed) migration.'),
-                __('Attempting to restore that now...'),
+                __('Database restore file found, but restore is currently disabled.'),
             ]);
-
-            $this->restoreDatabaseDump($io, $dbDumpPath);
         } else {
-            $this->dumpDatabase($io, $dbDumpPath);
+            $io->info(__('Database backup is currently disabled.'));
         }
 
         return $dbDumpPath;
