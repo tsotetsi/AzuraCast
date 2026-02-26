@@ -26,12 +26,12 @@ services:
       - azuracast_network
 
   mariadb:
-    image: mariadb:lts
-    container_name: mariadb
+    image: azuracast-mariadb:latest
+    build:
+      context: ./util/docker/mariadb/
     restart: unless-stopped
     volumes:
       - mariadb_data:/var/lib/mysql
-      - ./util/docker/mariadb/mariadb/db.sql:/docker-entrypoint-initdb.d/00-azuracast.sql
     environment:
       MARIADB_ROOT_PASSWORD: azur4c457
       MARIADB_DATABASE: azuracast
