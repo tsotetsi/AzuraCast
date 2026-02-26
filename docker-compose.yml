@@ -2,7 +2,7 @@ services:
   web:
     build:
       context: .
-    command: 'bash -c "php /var/azuracast/www/backend/bin/console azuracast:setup --init && /usr/bin/run-server.sh"'
+    # command: 'bash -c "php /var/azuracast/www/backend/bin/console azuracast:setup --init && /usr/bin/run-server.sh"'
     volumes:
       - azuracast_stations:/var/azuracast/stations
       - azuracast_backups:/var/azuracast/backups
@@ -29,8 +29,9 @@ services:
     image: mariadb:lts
     container_name: mariadb
     restart: unless-stopped
-    # volumes:
-    #   - ./util/docker/mariadb/mariadb/db.sql:/docker-entrypoint-initdb.d/00-azuracast.sql
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./util/docker/mariadb/mariadb/db.sql:/docker-entrypoint-initdb.d/00-azuracast.sql
     environment:
       MARIADB_ROOT_PASSWORD: azur4c457
       MARIADB_DATABASE: azuracast
@@ -44,11 +45,11 @@ services:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 10s
       timeout: 5s
-      retries: 3
-      start_period: 10s
+      retries: 5
 
 volumes:
   keydb_data:
+  mariadb_data:
   azuracast_stations:
   azuracast_backups:
   azuracast_storage:
