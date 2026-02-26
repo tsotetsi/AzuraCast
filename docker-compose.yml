@@ -16,6 +16,8 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
+      keydb:
+        condition: service_healthy
 
   keydb:
     image: azuracast-keydb:latest
@@ -27,6 +29,11 @@ services:
       - keydb_data:/data
     networks:
       - azuracast_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   mariadb:
     image: azuracast-mariadb:latest
