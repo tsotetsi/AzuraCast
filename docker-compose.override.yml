@@ -181,6 +181,23 @@ services:
     volumes:
       - php-fpm-socket:/var/run
 
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg
+    networks:
+      - azuracast_network
+    restart: unless-stopped
+
 networks:
   azuracast_network:
     name: azuracast_network
@@ -191,3 +208,4 @@ volumes:
   promtail_data: {}
   alertmanager_data: {}
   php-fpm-socket: {}
+  cadvisor_data: {}
