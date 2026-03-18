@@ -791,9 +791,11 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum_over_time(nginxlog_resp_bytes{instance=~\"$instance*\", resp_code=~\"20.\"}[5m])",
+          "editorMode": "code",
+          "expr": "sum(increase(nginx_http_requests_total{}[5m]))",
           "interval": "",
-          "legendFormat": "{{request}}",
+          "legendFormat": "__auto",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -807,6 +809,9 @@
       "description": "Total number of request in 24 hours for 200 response by nginx server",
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -828,18 +833,11 @@
       },
       "id": 39,
       "options": {
-        "displayMode": "gradient",
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        },
-        "maxVizHeight": 300,
-        "minVizHeight": 16,
-        "minVizWidth": 8,
-        "namePlacement": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
         "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "mean"
@@ -847,9 +845,9 @@
           "fields": "",
           "values": false
         },
-        "showUnfilled": true,
-        "sizing": "auto",
-        "valueMode": "color"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
       "pluginVersion": "12.3.3",
       "targets": [
@@ -857,14 +855,16 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum_over_time(nginxlog_resp_bytes{instance=~\"$instance*\", resp_code=~\"200\"}[24h])",
+          "editorMode": "code",
+          "expr": "sum_over_time(nginx_http_requests_total{}[24h])",
           "interval": "",
-          "legendFormat": "{{request}}",
+          "legendFormat": "__auto",
+          "range": true,
           "refId": "A"
         }
       ],
       "title": "Total Response 200 Req. [24h]",
-      "type": "bargauge"
+      "type": "stat"
     },
     {
       "datasource": {
