@@ -159,6 +159,43 @@
       },
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -184,19 +221,17 @@
       },
       "id": 20,
       "options": {
-        "minVizHeight": 75,
-        "minVizWidth": 75,
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "mean"
-          ],
-          "fields": "",
-          "values": false
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "sizing": "auto"
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
       },
       "pluginVersion": "12.3.3",
       "targets": [
@@ -204,14 +239,16 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "100 - (cpu_usage_idle{instance=~ \"$instance*\",cpu=\"cpu-total\"})",
+          "editorMode": "code",
+          "expr": "\trate(container_cpu_usage_seconds_total{name=\"azuracast-web-1\"}[5m])",
           "interval": "",
           "legendFormat": "{{instance}}",
+          "range": true,
           "refId": "A"
         }
       ],
       "title": "Current CPU Utilization %",
-      "type": "gauge"
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -219,6 +256,9 @@
       },
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -228,7 +268,7 @@
                 "value": 0
               },
               {
-                "color": "light-red",
+                "color": "red",
                 "value": 80
               }
             ]
@@ -267,9 +307,11 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(mem_used{instance=~\"$instance\"})",
+          "editorMode": "code",
+          "expr": "container_memory_working_set_bytes{name=\"azuracast-web-1\"}",
           "interval": "",
           "legendFormat": "{{ host }}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -2153,5 +2195,5 @@
   "timezone": "",
   "title": "Nginx",
   "uid": "4DFTt9Wnk",
-  "version": 1
+  "version": 2
 }
