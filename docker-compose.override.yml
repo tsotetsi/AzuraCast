@@ -125,24 +125,17 @@ services:
   mariadb-exporter:
     image: prom/mysqld-exporter
     container_name: mariadb-exporter
-    command:
-      - '--config.my-cnf=/etc/mysql/exporter.cnf'
-      - '--mysqld.address=mariadb:3306'
-    # # environment:
-    # #   - DATA_SOURCE_NAME=root:(/run/secrets/mariadb_exporter_password)@tcp(web:3306)/
-    # # The volume below can be removed if it was only for getting the password
-    volumes:
-      - ./monitoring/mariadb/mariadb_exporter.cnf:/etc/mysql/exporter.cnf:ro
-    # secrets:
-    #   - mariadb_exporter_password
-
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        export DATA_SOURCE_NAME="root:$$(cat /run/secrets/MARIADB_ROOT_PASSWORD)@tcp(mariadb:3306)/"
+        exec /bin/mysqld_exporter
+    secrets:
+      - MARIADB_ROOT_PASSWORD
     networks:
       - azuracast_network
     restart: unless-stopped
-    environment:
-      - DATA_SOURCE_NAME=root:${MARIADB_ROOT_PASSWORD}@tcp(mariadb:3306)/
-    env_file:
-      - azuracast.env
   # Redis Exporter
   redis-exporter:
     image: oliver006/redis_exporter
