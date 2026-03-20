@@ -240,7 +240,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "\trate(container_cpu_usage_seconds_total{name=\"azuracast-web-1\"}[5m])",
+          "expr": "rate(container_cpu_usage_seconds_total{name=\"azuracast-web-1\"}[5m])",
           "interval": "",
           "legendFormat": "{{instance}}",
           "range": true,
