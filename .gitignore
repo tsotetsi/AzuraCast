@@ -49,6 +49,11 @@ tmp/cache/*---*
 #docker-compose.override.yml
 /.env
 
+dev.env
+
+# Docker secrets.
+.secrets
+
 # Backups
 /*.tar.gz
 /*.zip

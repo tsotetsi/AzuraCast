@@ -54,3 +54,7 @@ generate-locales:
 import-locales:
 	docker compose exec --user=azuracast web azuracast_cli locale:import
 
+openssl:
+	@echo "$(YELLOW)ℹ️  Creating openssl password...$(NC)"
+	@openssl rand -base64 32 | tr -d '=+/ ' | cut -c1-20
+	@echo "$(GREEN)✅  Openssl password created above..$(NC)"
