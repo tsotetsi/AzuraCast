@@ -47,7 +47,8 @@
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "custom": {},
+          "unit": "percentunit"
         },
         "overrides": []
       },
@@ -141,7 +142,8 @@
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "custom": {},
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -181,8 +183,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(nginx_http_requests_total{status=~\"5..\"}[1m])) by (host)",
-          "legendFormat": "{{host}}",
+          "expr": "container_memory_usage_bytes{name=\"azuracast-web-1\"}",
+          "legendFormat": "__auto",
           "refId": "A"
         }
       ],
@@ -190,7 +192,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "5xx Rate (nginx)",
+      "title": "Current Memory Utilization",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -617,7 +619,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Azuracast – Stack Health",
+  "title": "Azuracast - Stack Health",
   "uid": "azuracast-stack-health",
   "version": 1
 }

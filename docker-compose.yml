@@ -1,0 +1,81 @@
+secrets:
+  MARIADB_ROOT_PASSWORD:
+    file: .secrets/mariadb/mariadb_root_password.txt
+  MARIADB_PASSWORD:
+    file: .secrets/mariadb/mariadb_password.txt
+
+services:
+  web:
+    build:
+      context: .
+    # command: 'bash -c "php /var/azuracast/www/backend/bin/console azuracast:setup --init && /usr/bin/run-server.sh"'
+    volumes:
+      - azuracast_stations:/var/azuracast/stations
+      - azuracast_backups:/var/azuracast/backups
+      - azuracast_storage:/var/azuracast/storage
+    environment:
+      ENABLE_REDIS: "true"
+      REDIS_HOST: keydb
+      MYSQL_HOST: mariadb
+      MYSQL_USER: ${MARIADB_USER:-azuracast}
+      MYSQL_PASSWORD_FILE: /run/secrets/MARIADB_PASSWORD
+    networks:
+      - azuracast_network
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      keydb:
+        condition: service_healthy
+    secrets:
+      - MARIADB_PASSWORD
+
+  keydb:
+    image: azuracast-keydb:latest
+    build:
+      context: ./util/docker/keydb
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - keydb_data:/data
+    networks:
+      - azuracast_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mariadb:
+    image: azuracast-mariadb:latest
+    build:
+      context: ./util/docker/mariadb/
+    restart: unless-stopped
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/MARIADB_ROOT_PASSWORD
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-azuracast}
+      MARIADB_USER: ${MARIADB_USER:-azuracast}
+      MARIADB_PASSWORD_FILE: /run/secrets/MARIADB_PASSWORD
+    secrets:
+      - MARIADB_ROOT_PASSWORD
+      - MARIADB_PASSWORD
+    ports:
+      - 3306:3306
+    networks:
+      - azuracast_network
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  keydb_data:
+  mariadb_data:
+  azuracast_stations:
+  azuracast_backups:
+  azuracast_storage:
+
+networks:
+  azuracast_network:

@@ -45,10 +45,13 @@ tmp/cache/*---*
 /tests/_output/*
 
 # Docker files
-/docker-compose.yml
 /docker-compose.new.yml
-/docker-compose.override.yml
 /.env
+
+dev.env
+
+# Docker secrets.
+.secrets
 
 # Backups
 /*.tar.gz
@@ -61,3 +64,6 @@ tmp/cache/*---*
 
 # Password file.
 monitoring/mariadb/mariadb_exporter_password.txt
+
+# IDE files
+.vscode/

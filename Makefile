@@ -8,12 +8,15 @@ install: # Developer mode installation
 	bash ./docker.sh install-dev
 
 up:
-	docker compose up -d
+	docker compose up -d --remove-orphans
 
 down:
 	docker compose down
 
 restart: down up
+
+web-up:
+	docker compose up -d azuracast --remove-orphans
 
 build: # Rebuild all containers and restart
 	docker compose build
@@ -51,3 +54,7 @@ generate-locales:
 import-locales:
 	docker compose exec --user=azuracast web azuracast_cli locale:import
 
+openssl:
+	@echo "$(YELLOW)ℹ️  Creating openssl password...$(NC)"
+	@openssl rand -base64 32 | tr -d '=+/ ' | cut -c1-20
+	@echo "$(GREEN)✅  Openssl password created above..$(NC)"

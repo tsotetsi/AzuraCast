@@ -1,9 +1,5 @@
 # syntax=docker/dockerfile:1
 
-#
-# MariaDB dependencies build step
-#
-FROM mariadb:lts-noble AS mariadb
 
 #
 # Built-in docs build step
@@ -27,9 +23,6 @@ FROM scratch AS dependencies
 # Add PHP extension installer tool
 COPY --from=php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
-# Add MariaDB dependencies
-COPY --from=mariadb /usr/local/bin/healthcheck.sh /usr/local/bin/db_healthcheck.sh
-COPY --from=mariadb /usr/local/bin/docker-entrypoint.sh /usr/local/bin/db_entrypoint.sh
 
 # Add Icecast
 COPY --from=icecast /usr/local/bin/icecast /usr/local/bin/icecast
@@ -71,16 +64,6 @@ RUN --mount=type=bind,source=./util/docker/common,target=/bd_build,rw \
     bash /bd_build/cleanup.sh
 
 RUN --mount=type=bind,source=./util/docker/common,target=/bd_build,rw \
-    --mount=type=bind,source=./util/docker/mariadb,target=/bd_build/mariadb,rw \
-    bash /bd_build/mariadb/setup.sh && \
-    bash /bd_build/cleanup.sh
-
-RUN --mount=type=bind,source=./util/docker/common,target=/bd_build,rw \
-    --mount=type=bind,source=./util/docker/redis,target=/bd_build/redis,rw \
-    bash /bd_build/redis/setup.sh && \
-    bash /bd_build/cleanup.sh
-
-RUN --mount=type=bind,source=./util/docker/common,target=/bd_build,rw \
     bash /bd_build/chown_dirs.sh
 
 # Add built-in docs
@@ -94,7 +77,6 @@ USER root
 
 VOLUME "/var/azuracast/stations"
 VOLUME "/var/azuracast/backups"
-VOLUME "/var/lib/mysql"
 VOLUME "/var/azuracast/storage/acme"
 VOLUME "/var/azuracast/storage/geoip"
 VOLUME "/var/azuracast/storage/rsas"

@@ -25,7 +25,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 6,
+  "id": 5,
   "links": [],
   "panels": [
     {
@@ -109,7 +109,7 @@
         "showThresholdMarkers": true,
         "sizing": "auto"
       },
-      "pluginVersion": "12.3.2",
+      "pluginVersion": "12.3.3",
       "targets": [
         {
           "alias": "",
@@ -165,6 +165,7 @@
       ],
       "timeFrom": "1m",
       "title": "Total Process Utilisation",
+      "transparent": true,
       "type": "gauge"
     },
     {
@@ -231,7 +232,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.2",
+      "pluginVersion": "12.3.3",
       "targets": [
         {
           "datasource": {
@@ -352,7 +353,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.2",
+      "pluginVersion": "12.3.3",
       "targets": [
         {
           "datasource": {
@@ -362,7 +363,7 @@
           "dsType": "influxdb",
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(delta(phpfpm_accepted_connections{instance=\"oslo:9253\"}[1m]))",
+          "expr": "sum(delta(phpfpm_accepted_connections{}[1m]))",
           "format": "table",
           "groupBy": [
             {
@@ -471,7 +472,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.2",
+      "pluginVersion": "12.3.3",
       "targets": [
         {
           "datasource": {
@@ -591,7 +592,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.2",
+      "pluginVersion": "12.3.3",
       "targets": [
         {
           "datasource": {
@@ -711,7 +712,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.2",
+      "pluginVersion": "12.3.3",
       "targets": [
         {
           "datasource": {
@@ -855,7 +856,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "12.3.2",
+      "pluginVersion": "12.3.3",
       "targets": [
         {
           "alias": "",
@@ -966,7 +967,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "12.3.2",
+      "pluginVersion": "12.3.3",
       "targets": [
         {
           "alias": "",
@@ -976,7 +977,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "rate(phpfpm_accepted_connections{instance=\"oslo:9253\"}[1m])",
+          "expr": "rate(phpfpm_accepted_connections{}[1m])",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1088,7 +1089,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.2",
+      "pluginVersion": "12.3.3",
       "targets": [
         {
           "datasource": {
@@ -1098,7 +1099,7 @@
           "dsType": "influxdb",
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(phpfpm_listen_queue{instance=\"$instance:9253\", scrape_uri=\"tcp://$service/fpm-status\"})",
+          "expr": "phpfpm_listen_queue{instance=\"$instance:9253\"}",
           "format": "time_series",
           "groupBy": [
             {
@@ -1231,7 +1232,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "12.3.2",
+      "pluginVersion": "12.3.3",
       "targets": [
         {
           "alias": "",
@@ -1241,7 +1242,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(phpfpm_process_request_duration{instance=\"$instance:9253\",scrape_uri=\"tcp://$service/fpm-status\"}) by (child)",
+          "expr": "phpfpm_process_request_duration{instance=\"$instance:9253\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -1741,7 +1742,7 @@
           "sort": "desc"
         }
       },
-      "pluginVersion": "12.3.2",
+      "pluginVersion": "12.3.3",
       "targets": [
         {
           "datasource": {
@@ -1751,7 +1752,7 @@
           "dsType": "influxdb",
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(phpfpm_process_state{instance=\"$instance:9253\",scrape_uri=\"tcp://$service/fpm-status\"}) by (state)",
+          "expr": "sum(phpfpm_process_state{instance=\"$instance:9253\"}) by (state)",
           "format": "time_series",
           "groupBy": [
             {
@@ -1898,7 +1899,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.2",
+      "pluginVersion": "12.3.3",
       "targets": [
         {
           "datasource": {
@@ -1908,7 +1909,7 @@
           "dsType": "influxdb",
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(phpfpm_active_processes{instance=\"$instance:9253\",scrape_uri=\"tcp://$service/fpm-status\"})",
+          "expr": "sum(phpfpm_active_processes{instance=\"$instance:9253\"})",
           "format": "time_series",
           "groupBy": [
             {
@@ -2022,6 +2023,7 @@
               "type": "linear"
             },
             "showPoints": "never",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -2133,7 +2135,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.1.0",
+      "pluginVersion": "12.3.3",
       "targets": [
         {
           "datasource": {
@@ -2143,7 +2145,7 @@
           "dsType": "influxdb",
           "editorMode": "code",
           "exemplar": true,
-          "expr": "avg((sum(phpfpm_active_processes{instance=\"$instance:9253\",scrape_uri=\"tcp://$service/fpm-status\"}) *100) / sum(phpfpm_total_processes{instance=\"$instance:9253\",scrape_uri=\"tcp://$service/fpm-status\"}) )",
+          "expr": "avg((sum(phpfpm_active_processes{instance=\"$instance:9253\"}) *100) / sum(phpfpm_total_processes{instance=\"$instance:9253\"}) )",
           "format": "time_series",
           "groupBy": [
             {
@@ -2223,6 +2225,7 @@
               "type": "linear"
             },
             "showPoints": "never",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -2273,7 +2276,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.1.0",
+      "pluginVersion": "12.3.3",
       "targets": [
         {
           "alias": "",
@@ -2283,7 +2286,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(phpfpm_process_requests{instance=\"$instance:9253\",scrape_uri=\"tcp://$service/fpm-status\"}) by (child)",
+          "expr": "sum(phpfpm_process_requests{instance=\"$instance:9253\"}) by (child)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2362,5 +2365,5 @@
   "timezone": "",
   "title": "php-fpm",
   "uid": "LpT35aB7z",
-  "version": 2
+  "version": 1
 }
