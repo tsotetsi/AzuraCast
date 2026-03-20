@@ -1,3 +1,9 @@
+secrets:
+  MARIADB_ROOT_PASSWORD:
+    file: .secrets/mariadb/mariadb_root_password.txt
+  MARIADB_PASSWORD:
+    file: .secrets/mariadb/mariadb_password.txt
+
 services:
   web:
     build:
@@ -11,6 +17,8 @@ services:
       ENABLE_REDIS: "true"
       REDIS_HOST: keydb
       MYSQL_HOST: mariadb
+      MYSQL_USER: ${MARIADB_USER:-azuracast}
+      MYSQL_PASSWORD_FILE: /run/secrets/MARIADB_PASSWORD
     networks:
       - azuracast_network
     depends_on:
@@ -18,6 +26,8 @@ services:
         condition: service_healthy
       keydb:
         condition: service_healthy
+    secrets:
+      - MARIADB_PASSWORD
 
   keydb:
     image: azuracast-keydb:latest
@@ -43,10 +53,13 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
     environment:
-      MARIADB_ROOT_PASSWORD: azur4c457
-      MARIADB_DATABASE: azuracast
-      MARIADB_USER: azuracast
-      MARIADB_PASSWORD: azur4c457
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/MARIADB_ROOT_PASSWORD
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-azuracast}
+      MARIADB_USER: ${MARIADB_USER:-azuracast}
+      MARIADB_PASSWORD_FILE: /run/secrets/MARIADB_PASSWORD
+    secrets:
+      - MARIADB_ROOT_PASSWORD
+      - MARIADB_PASSWORD
     ports:
       - 3306:3306
     networks:
