@@ -1,6 +1,8 @@
-# secrets:
-#   mariadb_exporter_password:
-#     file: ./monitoring/mariadb/mariadb_exporter_password.txt
+secrets:
+  MARIADB_PASSWORD:
+    file: .secrets/mariadb/mariadb_password.txt
+  MARIADB_ROOT_PASSWORD:
+    file: .secrets/mariadb/mariadb_root_password.txt
 
 services:
   web:
@@ -8,8 +10,20 @@ services:
     build:
       context: .
       target: development
+    entrypoint: /var/azuracast/www/util/docker/web/entrypoint.sh
+    command: 'tini -- /usr/local/bin/my_init --no-main-command'
+    environment:
+      # Set the DB_* variables the application code expects.
+      DB_HOST: mariadb
+      DB_PORT: 3306
+      DB_USER: ${MARIADB_USER:-azuracast}
+      DB_DATABASE: ${MARIADB_DATABASE:-azuracast}
+      MYSQL_PASSWORD_FILE: /run/secrets/MARIADB_PASSWORD
+    secrets:
+      - MARIADB_PASSWORD
     ports:
       - "80:80"
+      - "443:443"
     #  - "127.0.0.1:3306:3306" # MariaDB
       - "127.0.0.1:6025:6025" # Centrifugo
       - "9104:9104" # MariaDB Exporter
