@@ -84,7 +84,7 @@ final class ConfigWriter implements EventSubscriberInterface
         $pidfile = $configDir . '/liquidsoap.pid';
         $httpApiPort = $this->liquidsoap->getHttpApiPort($station);
 
-        $stationTz = self::toRawString($station->timezone ?? 'UTC');
+        $stationTz = self::cleanUpString($station->timezone ?? 'UTC');
 
         $stationApiAuth = self::toRawString($station->adapter_api_key);
         $stationApiUrl = self::toRawString(
@@ -133,8 +133,7 @@ final class ConfigWriter implements EventSubscriberInterface
             
             settings.init.compact_before_start := true
             
-            environment.set("TZ", {$stationTz}) 
-            
+            environment.set("TZ", "{$stationTz}")
             settings.azuracast.liquidsoap_api_port := {$httpApiPort}
             settings.azuracast.api_url := {$stationApiUrl}
             settings.azuracast.api_key := {$stationApiAuth}
