@@ -19,6 +19,7 @@ services:
       DB_USER: ${MARIADB_USER:-azuracast}
       DB_DATABASE: ${MARIADB_DATABASE:-azuracast}
       MYSQL_PASSWORD_FILE: /run/secrets/MARIADB_PASSWORD
+      LIQUIDSOAP_HOST: web
     secrets:
       - MARIADB_PASSWORD
     ports:

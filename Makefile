@@ -58,3 +58,13 @@ openssl:
 	@echo "$(YELLOW)ℹ️  Creating openssl password...$(NC)"
 	@openssl rand -base64 32 | tr -d '=+/ ' | cut -c1-20
 	@echo "$(GREEN)✅  Openssl password created above..$(NC)"
+
+up-dbs:
+	@echo "$(YELLOW)ℹ️  Starting KeyDB and MariaDB...$(NC)"
+	@docker compose up -d keydb mariadb
+	@echo "$(GREEN)✅  KeyDB and MariaDB started...$(NC)"
+
+up-web:
+	@echo "$(YELLOW)ℹ️  Starting web...$(NC)"
+	@docker compose up -d web
+	@echo "$(GREEN)✅   Web started...$(NC)"

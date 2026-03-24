@@ -1367,15 +1367,10 @@ final class ConfigWriter implements EventSubscriberInterface
 
     public static function toRawString(?string $value): string
     {
-        $delimiter = 'str_' . Strings::generatePassword(
-            5,
-            'abcdefghijklmnopqrstuvwxyz'
-        );
-
-        $startString = '{' . $delimiter . '|';
-        $endString = '|' . $delimiter . '}';
-
-        return $startString . str_replace($endString, '', $value ?? '') . $endString;
+        // Use a simple quoted string approach instead of complex delimiters
+        // that can cause parsing issues in Liquidsoap
+        $escapedValue = str_replace('"', '\"', $value ?? '');
+        return '"' . $escapedValue . '"';
     }
 
     /**

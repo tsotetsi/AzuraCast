@@ -88,7 +88,7 @@ final class Liquidsoap extends AbstractLocalAdapter
      */
     public function command(Station $station, string $commandStr): array
     {
-        $apiUri = $this->environment->getLocalUri()
+        $apiUri = $this->environment->getLiquidsoapHost()
             ->withPort($this->getHttpApiPort($station))
             ->withPath('/telnet');
 

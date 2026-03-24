@@ -65,6 +65,11 @@ final class Environment
 
     public const string ENABLE_WEB_UPDATER = 'ENABLE_WEB_UPDATER';
 
+    public const string LOCAL_URI = 'LOCAL_URI';
+    public const string INTERNAL_URI = 'INTERNAL_URI';
+
+    public const string LIQUIDSOAP_HOST = 'LIQUIDSOAP_HOST';
+
     // Database and Cache Configuration Variables
     public const string DB_HOST = 'MYSQL_HOST';
     public const string DB_PORT = 'MYSQL_PORT';
@@ -230,12 +235,36 @@ final class Environment
 
     public function getInternalUri(): UriInterface
     {
-        return new Uri('http://127.0.0.1:6010');
+        return new Uri(Types::string(
+            $this->data[self::INTERNAL_URI] ?? null,
+            'http://127.0.0.1:6010',
+            true
+        ));
     }
 
     public function getLocalUri(): UriInterface
     {
-        return new Uri('http://127.0.0.1');
+        return new Uri(Types::string(
+            $this->data[self::LOCAL_URI] ?? null,
+            'http://127.0.0.1',
+            true
+        ));
+    }
+
+    public function getLiquidsoapHost(): UriInterface
+    {
+        $host = Types::string(
+            $this->data[self::LIQUIDSOAP_HOST] ?? null,
+            'http://127.0.0.1',
+            true
+        );
+
+        // If the host doesn't have a scheme, add http:// prefix
+        if (!str_starts_with($host, 'http://') && !str_starts_with($host, 'https://')) {
+            $host = 'http://' . $host;
+        }
+
+        return new Uri($host);
     }
 
     public function getLang(): ?string

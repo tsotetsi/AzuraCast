@@ -6,19 +6,41 @@ secrets:
 
 services:
   web:
+    image: ghcr.io/azuracast/azuracast:development
     build:
       context: .
-    # command: 'bash -c "php /var/azuracast/www/backend/bin/console azuracast:setup --init && /usr/bin/run-server.sh"'
-    volumes:
-      - azuracast_stations:/var/azuracast/stations
-      - azuracast_backups:/var/azuracast/backups
-      - azuracast_storage:/var/azuracast/storage
+      target: development
+    entrypoint: /var/azuracast/www/util/docker/web/entrypoint.sh
+    command: 'tini -- /usr/local/bin/my_init --no-main-command'
     environment:
       ENABLE_REDIS: "true"
+      LIQUIDSOAP_HOST: web
       REDIS_HOST: keydb
       MYSQL_HOST: mariadb
       MYSQL_USER: ${MARIADB_USER:-azuracast}
       MYSQL_PASSWORD_FILE: /run/secrets/MARIADB_PASSWORD
+      # Set the DB_* variables the application code expects.
+      DB_HOST: mariadb
+      DB_PORT: 3306
+      DB_USER: ${MARIADB_USER:-azuracast}
+      DB_DATABASE: ${MARIADB_DATABASE:-azuracast}
+    volumes:
+      - azuracast_stations:/var/azuracast/stations
+      - azuracast_backups:/var/azuracast/backups
+      - azuracast_storage:/var/azuracast/storage
+      - ./node_modules:/var/azuracast/www/node_modules
+      - ./vendor:/var/azuracast/www/vendor
+      - ./:/var/azuracast/www
+      - php-fpm-socket:/var/run
+    ports:
+      - "80:80"
+      - "443:443"
+      - "127.0.0.1:6025:6025" # Centrifugo
+    cap_add:
+      - SYS_PTRACE
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
     networks:
       - azuracast_network
     depends_on:
@@ -76,6 +98,7 @@ volumes:
   azuracast_stations:
   azuracast_backups:
   azuracast_storage:
+  php-fpm-socket:
 
 networks:
   azuracast_network:

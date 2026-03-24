@@ -42,6 +42,8 @@ final class AppFactory
     public static function createCli(
         array $appEnvironment = []
     ): Application {
+        $appEnvironment[Environment::LIQUIDSOAP_HOST] = $_ENV['LIQUIDSOAP_HOST'] ?? $_SERVER['LIQUIDSOAP_HOST'] ?? 'stations';
+
         $environment = self::buildEnvironment($appEnvironment);
         $diBuilder = self::createContainerBuilder($environment);
         $di = self::buildContainer($diBuilder);
