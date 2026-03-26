@@ -64,7 +64,22 @@ up-dbs:
 	@docker compose up -d keydb mariadb
 	@echo "$(GREEN)✅  KeyDB and MariaDB started...$(NC)"
 
+up-sftpgo:
+	@echo "$(YELLOW)ℹ️  Starting SFTPGo...$(NC)"
+	@docker compose up -d sftpgo
+	@echo "$(GREEN)✅  SFTPGo started...$(NC)"
+
+up-centrifugo:
+	@echo "$(YELLOW)ℹ️  Starting Centrifugo...$(NC)"
+	@docker compose up -d centrifugo
+	@echo "$(GREEN)✅  Centrifugo started...$(NC)"
+
 up-web:
 	@echo "$(YELLOW)ℹ️  Starting web...$(NC)"
 	@docker compose up -d web
 	@echo "$(GREEN)✅   Web started...$(NC)"
+
+up-minimal:
+	@echo "$(YELLOW)ℹ️  Starting minimal services...$(NC)"
+	@docker compose up -d keydb mariadb sftpgo centrifugo web
+	@echo "$(GREEN)✅  Minimal services started...$(NC)"
