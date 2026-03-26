@@ -51,6 +51,39 @@ services:
     secrets:
       - MARIADB_PASSWORD
 
+  sftpgo:
+    image: drakkan/sftpgo:v2.6.4
+    container_name: azuracast_sftpgo
+    ports:
+      - "2022:2022" # SFTP
+    environment:
+      # Ensure permissions match your 'azuracast' user (usually 1000)
+      - SFTPGO_PUID=1000
+      - SFTPGO_PGID=1000
+      # Override the localhost hooks to point to the 'web' container
+      - SFTPGO_COMMON__ACTIONS__HOOK=http://web:6010/api/internal/sftp-event
+      - SFTPGO_DATA_PROVIDER__EXTERNAL_AUTH_HOOK=http://web:6010/api/internal/sftp-auth
+
+      - SFTPGO_SFTPD__BINDINGS__0__PORT=${AZURACAST_SFTP_PORT:-2022}
+      # Tell the binary where the keys are INSIDE the container
+      - SFTPGO_SFTPD__HOST_KEYS=/var/azuracast/storage/sftpgo/id_rsa,/var/azuracast/storage/sftpgo/id_ecdsa,/var/azuracast/storage/sftpgo/id_ed25519
+      - SFTPGO_DATA_PROVIDER__USERS_BASE_DIR=/var/azuracast/stations
+    volumes:
+      # The Main Config
+      - ./util/docker/web/sftpgo/sftpgo.json:/var/sftpgo/sftpgo.json:ro
+
+      # The Keys & Persistence: Absolute paths to match your existing scripts
+      - /var/azuracast/storage/sftpgo:/var/azuracast/storage/sftpgo
+
+      # The Media Bridge: Shared with the Web/App container
+      - /var/azuracast/stations:/var/azuracast/stations
+      
+      # Temp space for uploads
+      - sftpgo_temp:/tmp/sftpgo_temp
+    networks:
+      - azuracast_network
+    restart: unless-stopped
+
   keydb:
     image: azuracast-keydb:latest
     build:
@@ -93,6 +126,9 @@ services:
       retries: 5
 
 volumes:
+  sftpgo_data:
+  sftpgo_temp:
+  station_data:
   keydb_data:
   mariadb_data:
   azuracast_stations:
