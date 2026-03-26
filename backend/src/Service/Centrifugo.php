@@ -44,8 +44,10 @@ final class Centrifugo
 
     private function send(array $body): void
     {
+        $centrifugo_url = getenv('CENTRIFUGO_URL') ?: 'http://centrifugo:6025/api';
+
         $this->client->post(
-            'http://localhost:6025/api',
+            $centrifugo_url,
             [
                 'json' => $body,
             ]

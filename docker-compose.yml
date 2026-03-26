@@ -24,6 +24,7 @@ services:
       DB_PORT: 3306
       DB_USER: ${MARIADB_USER:-azuracast}
       DB_DATABASE: ${MARIADB_DATABASE:-azuracast}
+      CENTRIFUGO_URL: http://centrifugo:6025/api
     volumes:
       - azuracast_stations:/var/azuracast/stations
       - azuracast_backups:/var/azuracast/backups
@@ -35,7 +36,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "127.0.0.1:6025:6025" # Centrifugo
+      #- "127.0.0.1:6025:6025" # Centrifugo
     cap_add:
       - SYS_PTRACE
     extra_hosts:
@@ -83,6 +84,29 @@ services:
     networks:
       - azuracast_network
     restart: unless-stopped
+
+  centrifugo:
+    image: centrifugo/centrifugo:v5 # Use the version matching setup
+    container_name: azuracast_centrifugo
+    restart: unless-stopped
+    ports:
+      - "6020:6020"
+      - "6025:6025"
+    environment:
+      # Map the Redis engine logic from template
+      - CENTRIFUGO_ENGINE=redis
+      - CENTRIFUGO_REDIS_ADDRESS=keydb:6379
+      - CENTRIFUGO_REDIS_DB=${REDIS_DB:-0}
+      - CENTRIFUGO_REDIS_PREFIX=centrifugo:c
+      # Match the ports from TOML
+      - CENTRIFUGO_PORT=6020
+      - CENTRIFUGO_INTERNAL_PORT=6025
+    volumes:
+      # Mount existing config as the base
+      - ./util/docker/web/centrifugo/config.toml.tmpl:/etc/centrifugo/config.toml:ro
+    networks:
+      - azuracast_network
+    command: centrifugo -c /etc/centrifugo/config.toml
 
   keydb:
     image: azuracast-keydb:latest
