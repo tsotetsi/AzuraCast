@@ -26,7 +26,7 @@ services:
       - "80:80"
       - "443:443"
     #  - "127.0.0.1:3306:3306" # MariaDB
-      - "127.0.0.1:6025:6025" # Centrifugo
+      #- "127.0.0.1:6025:6025" # Centrifugo
       - "9104:9104" # MariaDB Exporter
       - "9113:9113" # Nginx Exporter
       - "9121:9121" # Redis Exporter
