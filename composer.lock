@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "76b9a25cfeb66d44e9d8aed38f410b87",
+    "content-hash": "d322f22d77fbdd232a63f7fa0c573a8d",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.374.0",
+            "version": "3.374.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "18525c8cc2a3aa2c1db23ceca5f57c5f8380d9c4"
+                "reference": "fa9801583e679aecc95660838708acfd98aa28e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/18525c8cc2a3aa2c1db23ceca5f57c5f8380d9c4",
-                "reference": "18525c8cc2a3aa2c1db23ceca5f57c5f8380d9c4",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/fa9801583e679aecc95660838708acfd98aa28e7",
+                "reference": "fa9801583e679aecc95660838708acfd98aa28e7",
                 "shasum": ""
             },
             "require": {
@@ -153,9 +153,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.374.0"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.374.1"
             },
-            "time": "2026-03-25T18:05:48+00:00"
+            "time": "2026-03-26T18:06:13+00:00"
         },
         {
             "name": "azuracast/doctrine-entity-normalizer",
@@ -2639,6 +2639,54 @@
                 }
             ],
             "time": "2026-02-19T13:11:17+00:00"
+        },
+        {
+            "name": "itspire/monolog-loki",
+            "version": "2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/itspire/monolog-loki.git",
+                "reference": "27dd41711857a753380c494a232482dcb5f07e54"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/itspire/monolog-loki/zipball/27dd41711857a753380c494a232482dcb5f07e54",
+                "reference": "27dd41711857a753380c494a232482dcb5f07e54",
+                "shasum": ""
+            },
+            "require": {
+                "monolog/monolog": "~3.0",
+                "php": "~8.1"
+            },
+            "require-dev": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "roave/security-advisories": "dev-master",
+                "squizlabs/php_codesniffer": "~3.x-dev",
+                "symfony/phpunit-bridge": "~6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Itspire\\MonologLoki\\": "src/main/php"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Ryan RAJKOMAR",
+                    "email": "ryan.rajkomar@itspire.fr"
+                }
+            ],
+            "description": "Monolog handler for Grafana Loki",
+            "support": {
+                "issues": "https://github.com/itspire/monolog-loki/issues",
+                "source": "https://github.com/itspire/monolog-loki/tree/2.1.1"
+            },
+            "time": "2024-07-05T14:41:51+00:00"
         },
         {
             "name": "james-heinrich/getid3",
@@ -12102,12 +12150,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "8522ed5a1cbb7828ed9bb1b3c12053f79da78155"
+                "reference": "b4cf097607afd6063b103f723d55cf481c04ee07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/8522ed5a1cbb7828ed9bb1b3c12053f79da78155",
-                "reference": "8522ed5a1cbb7828ed9bb1b3c12053f79da78155",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/b4cf097607afd6063b103f723d55cf481c04ee07",
+                "reference": "b4cf097607afd6063b103f723d55cf481c04ee07",
                 "shasum": ""
             },
             "conflict": {
@@ -12551,7 +12599,7 @@
                 "leantime/leantime": "<3.3",
                 "lexik/jwt-authentication-bundle": "<2.10.7|>=2.11,<2.11.3",
                 "libreform/libreform": ">=2,<=2.0.8",
-                "librenms/librenms": "<26.2",
+                "librenms/librenms": "<26.3",
                 "liftkit/database": "<2.13.2",
                 "lightsaml/lightsaml": "<1.3.5",
                 "limesurvey/limesurvey": "<6.15.4",
@@ -13141,7 +13189,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-03-25T22:13:18+00:00"
+            "time": "2026-03-26T18:25:06+00:00"
         },
         {
             "name": "sebastian/cli-parser",

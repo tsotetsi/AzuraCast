@@ -44,6 +44,7 @@
     "gettext/translator": "^1.2.1",
     "guzzlehttp/guzzle": "^7.10",
     "intervention/image": "^3.11.4",
+    "itspire/monolog-loki": "^2.1.0",
     "james-heinrich/getid3": "v2.0.0-beta6",
     "lbuchs/webauthn": "^2.2",
     "league/csv": "^9.27.1",
