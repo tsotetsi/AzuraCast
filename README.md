@@ -20,8 +20,10 @@
 
   <hr>
 
-  [![Docker ready](https://img.shields.io/badge/Docker-ready-%232496ED.svg?logo=docker&logoColor=white)](https://www.azuracast.com/docs/getting-started/installation/#docker)
-  ![PHP](https://img.shields.io/badge/PHP-8.5-%23777BB4.svg?logo=php&logoColor=white)
+  [![Docker Latest](https://img.shields.io/badge/Docker-latest-%232496ED.svg?logo=docker&logoColor=white)](https://www.azuracast.com/docs/getting-started/installation/#docker)
+  [![Nginx](https://img.shields.io/badge/Nginx-1.29.7-%232496ED.svg?logo=nginx&logoColor=white)](https://www.azuracast.com/docs/getting-started/installation/#docker)
+  [![sftpgo](https://img.shields.io/badge/sftpgo-2.6.4-%232496ED.svg?logo=sftpgo&logoColor=white)](https://www.azuracast.com/docs/getting-started/installation/#docker)
+  [![Centrifugo](https://img.shields.io/badge/Centrifugo-6.25-%23777BB4.svg?logo=php&logoColor=white)](https://www.azuracast.com/docs/getting-started/installation/#docker)
   ![MariaDB](https://img.shields.io/badge/MariaDB-11.4-%23003545.svg?logo=mariadb&logoColor=white)
   ![Valkey](https://img.shields.io/badge/Valkey-8.1-%23FF4500.svg?logo=redis&logoColor=white)
   [![Swagger UI](https://img.shields.io/badge/Swagger-UI-%2385EA2D.svg?logo=swagger&logoColor=white)](/api/docs)
