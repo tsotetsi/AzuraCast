@@ -1,0 +1,74 @@
+# syntax=docker/dockerfile:1
+
+# Icecast-KH with AzuraCast customizations build step
+FROM ghcr.io/azuracast/icecast-ac:2025-12-29 AS icecast
+
+# PHP Extension Installer build step
+FROM mlocati/php-extension-installer AS php-extension-installer
+
+# ---
+
+FROM scratch AS dependencies
+
+# Add PHP extension installer tool
+COPY --from=php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+
+# Add Icecast
+COPY --from=icecast /usr/local/bin/icecast /usr/local/bin/icecast
+COPY --from=icecast /usr/local/share/icecast /usr/local/share/icecast
+
+#
+# Final build image
+#
+FROM php:8.5-fpm-trixie AS pre-final
+
+ENV TZ="UTC" \
+    LANGUAGE="en_US.UTF-8" \
+    LC_ALL="en_US.UTF-8" \
+    LANG="en_US.UTF-8" \
+    LC_TYPE="en_US.UTF-8"
+
+COPY --link --from=dependencies / /
+
+# Run base build process (installs gosu, tini, supervisor, etc.)
+RUN --mount=type=bind,source=./util/docker/common,target=/bd_build,rw \
+    bash /bd_build/prepare.sh && \
+    bash /bd_build/add_user.sh && \
+    bash /bd_build/cleanup.sh
+
+# Build supervisor
+RUN --mount=type=bind,source=./util/docker/common,target=/bd_build,rw \
+    --mount=type=bind,source=./util/docker/supervisor,target=/bd_build/supervisor,rw \
+    bash /bd_build/supervisor/setup.sh && \
+    bash /bd_build/cleanup.sh
+
+# Build stations (installs liquidsoap, ffmpeg, etc.)
+RUN --mount=type=bind,source=./util/docker/common,target=/bd_build,rw \
+    --mount=type=bind,source=./util/docker/stations,target=/bd_build/stations,rw \
+    bash /bd_build/stations/setup.sh && \
+    bash /bd_build/cleanup.sh
+
+RUN --mount=type=bind,source=./util/docker/common,target=/bd_build,rw \
+    bash /bd_build/chown_dirs.sh
+
+USER azuracast
+RUN touch /var/azuracast/.docker
+USER root
+
+# Shared volumes
+VOLUME "/var/azuracast/stations"
+VOLUME "/var/azuracast/backups"
+VOLUME "/var/azuracast/storage/acme"
+VOLUME "/var/azuracast/storage/geoip"
+VOLUME "/var/azuracast/storage/rsas"
+VOLUME "/var/azuracast/storage/sftpgo"
+VOLUME "/var/azuracast/storage/shoutcast2"
+VOLUME "/var/azuracast/storage/stereo_tool"
+VOLUME "/var/azuracast/storage/uploads"
+
+ENV LANG="en_US.UTF-8" \
+    PATH="${PATH}:/var/azuracast/storage/shoutcast2"
+
+# Entrypoint and default command
+ENTRYPOINT ["tini", "--", "/usr/local/bin/my_init"]
+CMD ["--no-main-command"]

@@ -52,6 +52,23 @@ services:
     secrets:
       - MARIADB_PASSWORD
 
+  stations:
+    build:
+      context: .
+      dockerfile: util/docker/stations/Dockerfile.stations
+    volumes:
+      - azuracast_stations:/var/azuracast/stations
+      - azuracast_backups:/var/azuracast/backups
+      - azuracast_storage:/var/azuracast/storage
+    networks:
+      - azuracast_network
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      keydb:
+        condition: service_healthy
+    restart: unless-stopped
+
   sftpgo:
     image: drakkan/sftpgo:v2.6.4
     container_name: azuracast_sftpgo
