@@ -30,7 +30,7 @@ services:
       - "9104:9104" # MariaDB Exporter
       - "9113:9113" # Nginx Exporter
       - "9121:9121" # Redis Exporter
-      - "9000:9000" # PHP-FPM for exporter
+      #- "9000:9000" # PHP-FPM for exporter
     cap_add:
       - SYS_PTRACE
     # environment:

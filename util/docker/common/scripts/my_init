@@ -6,6 +6,7 @@ chmod 744 /container.env
 
 # Run startup scripts
 for f in /etc/my_init.d/*.sh; do
+  [ -e "$f" ] || continue
   echo "** Running startup script '$f'..."
   bash "$f" -H
   echo "** Startup script complete."
