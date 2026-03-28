@@ -53,10 +53,10 @@ RUN --mount=type=bind,source=./util/docker/common,target=/bd_build,rw \
     bash /bd_build/supervisor/setup.sh && \
     bash /bd_build/cleanup.sh
 
-RUN --mount=type=bind,source=./util/docker/common,target=/bd_build,rw \
-    --mount=type=bind,source=./util/docker/stations,target=/bd_build/stations,rw \
-    bash /bd_build/stations/setup.sh && \
-    bash /bd_build/cleanup.sh
+# RUN --mount=type=bind,source=./util/docker/common,target=/bd_build,rw \
+#     --mount=type=bind,source=./util/docker/stations,target=/bd_build/stations,rw \
+#     bash /bd_build/stations/setup.sh && \
+#     bash /bd_build/cleanup.sh
 
 RUN --mount=type=bind,source=./util/docker/common,target=/bd_build,rw \
     --mount=type=bind,source=./util/docker/web,target=/bd_build/web,rw \

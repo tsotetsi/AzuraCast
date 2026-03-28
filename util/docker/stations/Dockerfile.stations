@@ -1,0 +1,58 @@
+# Icecast-KH with AzuraCast customizations build step
+FROM ghcr.io/azuracast/icecast-ac:2025-12-29 AS icecast
+
+# PHP Extension Installer build step
+FROM mlocati/php-extension-installer AS php-extension-installer
+
+#--------------------------------------------------------------------------
+# AzuraCast Stations Service
+#--------------------------------------------------------------------------
+FROM scratch AS dependencies
+
+# Add PHP extension installer tool
+COPY --from=php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+
+# Add Icecast
+COPY --from=icecast /usr/local/bin/icecast /usr/local/bin/icecast
+COPY --from=icecast /usr/local/share/icecast /usr/local/share/icecast
+
+# Final build image
+FROM php:8.5-fpm-trixie AS pre-final
+
+COPY --link --from=dependencies / /
+
+# Set up required environment variables.
+ENV LANG=C.UTF-8
+
+# Install dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    supervisor \
+    tini \
+    wget \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN install-php-extensions \
+    sockets \
+    pcntl \
+    posix \
+    redis
+
+# Copy AzuraCast files
+COPY ./util/docker/common/service.d /etc/service.d
+COPY ./util/docker/stations/service.full /etc/service.d
+
+# Copy base scripts
+COPY ./util/docker/common/scripts /usr/local/bin
+COPY ./util/docker/stations/scripts /usr/local/bin
+
+# Set up AzuraCast user.
+RUN groupadd -g 1000 azuracast && \
+    useradd -u 1000 -g 1000 -m -s /bin/bash azuracast
+
+# Set up tini as entrypoint.
+ENTRYPOINT ["tini", "--"]
+
+# Set default command.
+CMD ["/usr/local/bin/my_init"]
