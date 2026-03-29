@@ -144,7 +144,7 @@ final class UptimeWaitCommand extends CommandAbstract
     {
         $guzzle = new Client();
         $response = $guzzle->get(
-            'http://127.0.0.1:6010/api/status',
+            'http://web:6010/api/status',
             [
                 RequestOptions::ALLOW_REDIRECTS => false,
                 RequestOptions::HTTP_ERRORS => true,

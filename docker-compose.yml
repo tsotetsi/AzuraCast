@@ -14,7 +14,7 @@ services:
     command: 'tini -- /usr/local/bin/my_init --no-main-command'
     environment:
       ENABLE_REDIS: "true"
-      LIQUIDSOAP_HOST: web
+      LIQUIDSOAP_HOST: stations
       REDIS_HOST: keydb
       MYSQL_HOST: mariadb
       MYSQL_USER: ${MARIADB_USER:-azuracast}
@@ -67,6 +67,17 @@ services:
         condition: service_healthy
       keydb:
         condition: service_healthy
+    expose:
+      - "8004"
+      - "8014"
+      - "8024"
+      - "8034"
+      - "8044"
+      - "8054"
+      - "8064"
+      - "8074"
+      - "8084"
+      - "8094"
     restart: unless-stopped
 
   sftpgo:

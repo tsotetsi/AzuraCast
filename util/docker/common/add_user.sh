@@ -23,6 +23,7 @@ mkdir -p /var/azuracast/www /var/azuracast/stations /var/azuracast/www_tmp \
   /var/azuracast/storage/acme
 
 chown -R azuracast:azuracast /var/azuracast
+chmod 755 /var/azuracast
 chmod -R 777 /var/azuracast/www_tmp
 
 echo 'azuracast ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers

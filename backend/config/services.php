@@ -571,6 +571,19 @@ return [
         $logger
     ),
 
+    // Nginx manager
+    App\Nginx\Nginx::class => static fn(
+        Supervisor\SupervisorInterface $supervisor,
+        Psr\EventDispatcher\EventDispatcherInterface $dispatcher
+    ) => new App\Nginx\Nginx($supervisor, $dispatcher),
+
+    // Nginx config writer
+    App\Nginx\ConfigWriter::class => static fn(
+        App\Environment $environment
+    ) => new App\Nginx\ConfigWriter($environment),
+
+
+
     // NowPlaying Adapter factory
     NowPlaying\AdapterFactory::class => static function (
         GuzzleHttp\Client $httpClient,

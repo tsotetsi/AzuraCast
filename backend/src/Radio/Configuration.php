@@ -6,21 +6,25 @@ namespace App\Radio;
 
 use App\Container\EntityManagerAwareTrait;
 use App\Container\EnvironmentAwareTrait;
+use App\Container\LoggerAwareTrait;
 use App\Entity\Enums\PlaylistTypes;
 use App\Entity\Repository\StationPlaylistMediaRepository;
 use App\Entity\Station;
 use App\Entity\StationPlaylist;
 use App\Exception;
+use App\Exception\Supervisor\NotRunningException;
 use App\Radio\Enums\BackendAdapters;
 use App\Radio\Enums\FrontendAdapters;
+use Psr\Log\LoggerAwareInterface;
 use RuntimeException;
 use Supervisor\Exception\SupervisorException;
 use Supervisor\SupervisorInterface;
 
-final class Configuration
+final class Configuration implements LoggerAwareInterface
 {
     use EntityManagerAwareTrait;
     use EnvironmentAwareTrait;
+    use LoggerAwareTrait;
 
     public const int DEFAULT_PORT_MIN = 8000;
     public const int DEFAULT_PORT_MAX = 8499;
@@ -93,117 +97,207 @@ final class Configuration
             return;
         }
 
-        $this->initializeConfiguration($station);
+        try {
+            $this->initializeConfiguration($station);
 
-        // Initialize adapters.
-        $supervisorConfig = [];
-        $supervisorConfigFile = self::getSupervisorConfPath($station);
+            // Initialize adapters.
+            $supervisorConfig = [];
+            $supervisorConfigFile = self::getSupervisorConfPath($station);
 
-        $frontendEnum = $station->frontend_type;
-        $backendEnum = $station->backend_type;
+            $frontendEnum = $station->frontend_type;
+            $backendEnum = $station->backend_type;
 
-        $frontend = $this->adapters->getFrontendAdapter($station);
-        $backend = $this->adapters->getBackendAdapter($station);
+            $frontend = $this->adapters->getFrontendAdapter($station);
+            $backend = $this->adapters->getBackendAdapter($station);
 
-        // If no processes need to be managed, remove any existing config.
-        if (
-            (null === $frontend || !$frontend->hasCommand($station))
-            && (null === $backend || !$backend->hasCommand($station))
-        ) {
-            $this->removeLocalServices($station, $reloadSupervisor, true);
-            throw new RuntimeException('Station has no local services.');
-        }
-
-        if (!$station->has_started) {
-            $this->removeLocalServices($station, $reloadSupervisor);
-            throw new RuntimeException('Station has not started yet.');
-        }
-
-        if (!$station->is_enabled) {
-            $this->removeLocalServices($station, $reloadSupervisor);
-            throw new RuntimeException('Station is disabled.');
-        }
-
-        // Write group section of config
-        $programNames = [];
-        $programs = [];
-
-        if (null !== $backend && $backend->hasCommand($station)) {
-            $programName = $backend->getSupervisorProgramName($station);
-
-            $programs[$programName] = $backend;
-            $programNames[] = $programName;
-        }
-
-        if (null !== $frontend && $frontend->hasCommand($station)) {
-            $programName = $frontend->getSupervisorProgramName($station);
-
-            $programs[$programName] = $frontend;
-            $programNames[] = $programName;
-        }
-
-        $stationGroup = self::getSupervisorGroupName($station);
-
-        $supervisorConfig[] = '[group:' . $stationGroup . ']';
-        $supervisorConfig[] = 'programs=' . implode(',', $programNames);
-        $supervisorConfig[] = '';
-
-        foreach ($programs as $programName => $adapter) {
-            $configLines = [
-                'user' => 'azuracast',
-                'priority' => 950,
-                'startsecs' => 10,
-                'startretries' => 5,
-                'command' => $adapter->getCommand($station),
-                'directory' => $station->getRadioConfigDir(),
-                'environment' => self::buildEnvironment([
-                    'TZ' => $station->timezone ?? 'UTC',
-                    ...$adapter->getEnvironmentVariables($station),
-                ]),
-                'autostart' => 'false',
-                'autorestart' => 'true',
-                'stdout_logfile' => $adapter->getLogPath($station),
-                'stdout_logfile_maxbytes' => '5MB',
-                'stdout_logfile_backups' => '5',
-                'redirect_stderr' => 'true',
-                'stdout_events_enabled' => 'true',
-                'stderr_events_enabled' => 'true',
-            ];
-
-            $supervisorConfig[] = '[program:' . $programName . ']';
-            foreach ($configLines as $configKey => $configValue) {
-                $supervisorConfig[] = $configKey . '=' . $configValue;
+            // If no processes need to be managed, remove any existing config.
+            if (
+                (null === $frontend || !$frontend->hasCommand($station))
+                && (null === $backend || !$backend->hasCommand($station))
+            ) {
+                $this->removeLocalServices($station, $reloadSupervisor, true);
+                throw new RuntimeException('Station has no local services.');
             }
+
+
+            if (!$station->is_enabled) {
+                $this->removeLocalServices($station, $reloadSupervisor);
+                throw new RuntimeException('Station is disabled.');
+            }
+
+            // Write group section of config
+            $programNames = [];
+            $programs = [];
+
+            if (null !== $backend && $backend->hasCommand($station)) {
+                $programName = $backend->getSupervisorProgramName($station);
+
+                $programs[$programName] = $backend;
+                $programNames[] = $programName;
+            }
+
+            if (null !== $frontend && $frontend->hasCommand($station)) {
+                $programName = $frontend->getSupervisorProgramName($station);
+
+                $programs[$programName] = $frontend;
+                $programNames[] = $programName;
+            }
+
+            $stationGroup = self::getSupervisorGroupName($station);
+
+            $supervisorConfig[] = '[group:' . $stationGroup . ']';
+            $supervisorConfig[] = 'programs=' . implode(',', $programNames);
             $supervisorConfig[] = '';
-        }
 
-        // Write config contents
-        $supervisorConfigData = implode("\n", $supervisorConfig);
-        file_put_contents($supervisorConfigFile, $supervisorConfigData);
+            foreach ($programs as $programName => $adapter) {
+                $logPath = null;
+                foreach ($adapter->getLogTypes($station) as $logType) {
+                    if (str_ends_with($logType->path, '.log')) {
+                        $logPath = $logType->path;
+                        break;
+                    }
+                }
 
-        // Write supporting configurations.
-        $frontend?->write($station);
-        $backend?->write($station);
+                $configLines = [
+                    'user' => 'azuracast',
+                    'priority' => 950,
+                    'startsecs' => 10,
+                    'startretries' => 5,
+                    'command' => $adapter->getCommand($station),
+                    'directory' => $station->getRadioConfigDir(),
+                    'environment' => self::buildEnvironment([
+                        'TZ' => $station->timezone ?? 'UTC',
+                        ...$adapter->getEnvironmentVariables($station),
+                    ]),
+                    'autostart' => 'false',
+                    'autorestart' => 'true',
+                    'stdout_logfile' => $logPath,
+                    'stdout_logfile_maxbytes' => '5MB',
+                    'stdout_logfile_backups' => '5',
+                    'redirect_stderr' => 'true',
+                    'stdout_events_enabled' => 'true',
+                    'stderr_events_enabled' => 'true',
+                ];
 
-        $this->markAsStarted($station);
+                $supervisorConfig[] = '[program:' . $programName . ']';
+                foreach ($configLines as $configKey => $configValue) {
+                    $supervisorConfig[] = $configKey . '=' . $configValue;
+                }
+                $supervisorConfig[] = '';
+            }
 
-        // Reload Supervisord and process groups
-        if ($reloadSupervisor) {
+            // Write config contents
+            $supervisorConfigData = implode("\n", $supervisorConfig);
+            file_put_contents($supervisorConfigFile, $supervisorConfigData);
+
+            // Write supporting configurations.
+            $frontend?->write($station);
+            $backend?->write($station);
+
+            $this->markAsStarted($station);
+
+            // Reload Supervisord and process groups
+            if ($reloadSupervisor) {
+            $this->logger->info(
+                'Reloading supervisor.',
+                [
+                    'station_id' => $station->id,
+                    'station_name' => $station->name,
+                    'force_restart' => $forceRestart,
+                    'attempt_reload' => $attemptReload,
+                ]
+            );
+
             $affectedGroups = $this->reloadSupervisor();
             $wasRestarted = in_array($stationGroup, $affectedGroups, true);
 
+            $this->logger->info(
+                'Supervisor reloaded.',
+                [
+                    'station_id' => $station->id,
+                    'station_name' => $station->name,
+                    'affected_groups' => $affectedGroups,
+                    'was_restarted' => $wasRestarted,
+                ]
+            );
+
             if (!$wasRestarted && $forceRestart) {
+                $this->logger->info(
+                    'Forcing station restart.',
+                    [
+                        'station_id' => $station->id,
+                        'station_name' => $station->name,
+                    ]
+                );
+
                 try {
                     if ($attemptReload && ($backendEnum->isEnabled() || $frontendEnum->supportsReload())) {
+                        $this->logger->info(
+                            'Attempting to reload station.',
+                            [
+                                'station_id' => $station->id,
+                                'station_name' => $station->name,
+                            ]
+                        );
                         $backend?->reload($station);
                         $frontend?->reload($station);
                     } else {
-                        $this->supervisor->stopProcessGroup($stationGroup);
+                        $this->logger->info(
+                            'Attempting to stop station process group before starting.',
+                            [
+                                'station_id' => $station->id,
+                                'station_name' => $station->name,
+                                'group' => $stationGroup,
+                            ]
+                        );
+
+                        try {
+                            $this->supervisor->stopProcessGroup($stationGroup, false);
+                        } catch (SupervisorException $e) {
+                            $this->logger->info(
+                                'Station process group was not running, which is fine.',
+                                [
+                                    'station_id' => $station->id,
+                                    'station_name' => $station->name,
+                                    'group' => $stationGroup,
+                                    'exception' => $e->getMessage(),
+                                ]
+                            );
+                        }
+
+                        $this->logger->info(
+                            'Starting station process group.',
+                            [
+                                'station_id' => $station->id,
+                                'station_name' => $station->name,
+                                'group' => $stationGroup,
+                            ]
+                        );
                         $this->supervisor->startProcessGroup($stationGroup);
                     }
-                } catch (SupervisorException) {
+                } catch (Exception\SupervisorException $e) {
+                    $this->logger->info(
+                        'Error starting station process group, but this is likely okay.',
+                        [
+                            'station_id' => $station->id,
+                            'station_name' => $station->name,
+                            'exception' => $e->getMessage(),
+                        ]
+                    );
                 }
             }
+        }
+        } catch (\Throwable $e) {
+            $this->logger->error(
+                sprintf('Error writing configuration for station: %s', $e->getMessage()),
+                [
+                    'station_id' => $station->id,
+                    'station_name' => $station->name,
+                    'exception' => $e,
+                ]
+            );
+
+            throw $e;
         }
     }
 

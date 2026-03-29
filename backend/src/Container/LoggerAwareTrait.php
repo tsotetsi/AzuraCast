@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace App\Container;
 
 use DI\Attribute\Inject;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 trait LoggerAwareTrait
 {
-    protected Logger $logger;
+    protected LoggerInterface $logger;
 
     #[Inject]
-    public function setLogger(Logger $logger): void
+    public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
 
-    public function getLogger(): Logger
+    public function getLogger(): LoggerInterface
     {
         return $this->logger;
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Nginx;
 
+use App\Environment;
 use App\Entity\Station;
 use App\Event\Nginx\WriteNginxConfiguration;
 use App\Radio\Enums\BackendAdapters;
@@ -12,6 +13,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class ConfigWriter implements EventSubscriberInterface
 {
+
+    public function __construct(
+        private readonly Environment $environment
+    ) {
+    }
+
     /**
      * @return mixed[]
      */
@@ -35,6 +42,8 @@ final class ConfigWriter implements EventSubscriberInterface
             return;
         }
 
+        $liquidsoapHost = $this->environment->getLiquidsoapHost();
+
         $listenBaseUrl = CustomUrls::getListenUrl($station);
         $listenBaseUrlForRegex = preg_quote($listenBaseUrl);
         $port = $station->frontend_config->port;
@@ -57,7 +66,7 @@ final class ConfigWriter implements EventSubscriberInterface
                 proxy_set_header Host \$host/{$listenBaseUrl};
                 
                 set \$args \$args&_ic2=1;
-                proxy_pass http://127.0.0.1:{$port}/\$2?\$args;
+                proxy_pass http://{$liquidsoapHost}:{$port}/\$2?\$args;
             }
             NGINX
         );
@@ -72,6 +81,8 @@ final class ConfigWriter implements EventSubscriberInterface
             return;
         }
 
+        $liquidsoapHost = $this->environment->getLiquidsoapHost();
+
         $webDjBaseUrl = preg_quote(CustomUrls::getWebDjUrl($station));
         $autoDjPort = $station->backend_config->dj_port;
 
@@ -81,7 +92,7 @@ final class ConfigWriter implements EventSubscriberInterface
             location ~ ^({$webDjBaseUrl}|/radio/{$autoDjPort})(/?)(.*)\$ {
                 include proxy_params;
 
-                proxy_pass http://127.0.0.1:{$autoDjPort}/$3;
+                proxy_pass http://{$liquidsoapHost}:{$autoDjPort}/$3;
             }
             NGINX
         );

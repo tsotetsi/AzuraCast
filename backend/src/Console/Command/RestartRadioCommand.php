@@ -68,6 +68,19 @@ final class RestartRadioCommand extends CommandAbstract
 
         foreach ($stations as $station) {
             try {
+                $io->writeln('');
+                $io->writeln(sprintf('Restarting station: %s (%s)', $station->name, $station->short_name));
+
+                $io->definitionList(
+                    ['ID' => $station->id],
+                    ['Enabled' => var_export($station->is_enabled, true)],
+                    ['Frontend' => $station->frontend_type->value],
+                    ['Backend' => $station->backend_type->value],
+                    ['Needs Restart' => var_export($station->needs_restart, true)],
+                    ['Has Started' => var_export($station->has_started, true)],
+                    ['Force Restart' => 'true']
+                );
+
                 $this->configuration->writeConfiguration(
                     station: $station,
                     reloadSupervisor: !$noSupervisorRestart,

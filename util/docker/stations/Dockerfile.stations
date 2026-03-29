@@ -42,6 +42,9 @@ RUN --mount=type=bind,source=./util/docker/common,target=/bd_build,rw \
     bash /bd_build/supervisor/setup.sh && \
     bash /bd_build/cleanup.sh
 
+# Copy Liquidsoap supervisor config
+COPY --link util/docker/supervisor/service.d/liquidsoap.conf /etc/supervisor/conf.d/liquidsoap.conf
+
 # Build stations (installs liquidsoap, ffmpeg, etc.)
 RUN --mount=type=bind,source=./util/docker/common,target=/bd_build,rw \
     --mount=type=bind,source=./util/docker/stations,target=/bd_build/stations,rw \
@@ -68,6 +71,10 @@ VOLUME "/var/azuracast/storage/uploads"
 
 ENV LANG="en_US.UTF-8" \
     PATH="${PATH}:/var/azuracast/storage/shoutcast2"
+
+# Expose Liquidsoap HTTP API ports for multiple stations
+# Port calculation: 8004 + (station_id - 1) * 10
+EXPOSE 8004 8014 8024 8034 8044 8054 8064 8074 8084 8094
 
 # Entrypoint and default command
 ENTRYPOINT ["tini", "--", "/usr/local/bin/my_init"]

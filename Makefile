@@ -81,5 +81,5 @@ up-web:
 
 up-minimal:
 	@echo "$(YELLOW)ℹ️  Starting minimal services...$(NC)"
-	@docker compose up -d keydb mariadb sftpgo centrifugo web
+	@docker compose up -d keydb mariadb sftpgo centrifugo stations web
 	@echo "$(GREEN)✅  Minimal services started...$(NC)"

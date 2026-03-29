@@ -92,14 +92,40 @@ final class Liquidsoap extends AbstractLocalAdapter
             ->withPort($this->getHttpApiPort($station))
             ->withPath('/telnet');
 
-        $response = $this->httpClient->post($apiUri, [
-            'headers' => [
-                'x-liquidsoap-api-key' => $station->adapter_api_key,
-            ],
-            'body' => $commandStr,
-        ]);
+        $this->logger->debug(
+            sprintf('Sending command to Liquidsoap API: %s', $apiUri),
+            [
+                'command' => $commandStr,
+            ]
+        );
+
+        try {
+            $response = $this->httpClient->post($apiUri, [
+                'headers' => [
+                    'x-liquidsoap-api-key' => $station->adapter_api_key,
+                ],
+                'body' => $commandStr,
+            ]);
+        } catch (Throwable $e) {
+            $this->logger->error(
+                sprintf('Error sending command to Liquidsoap API: %s', $e->getMessage()),
+                [
+                    'exception' => $e,
+                    'apiUri' => $apiUri,
+                    'command' => $commandStr,
+                ]
+            );
+            throw $e;
+        }
 
         $responseBody = trim($response->getBody()->getContents());
+
+        $this->logger->debug(
+            sprintf('Received response from Liquidsoap API: %s', $apiUri),
+            [
+                'response' => $responseBody,
+            ]
+        );
         return explode("\n", $responseBody);
     }
 

@@ -68,7 +68,7 @@ final class Environment
     public const string LOCAL_URI = 'LOCAL_URI';
     public const string INTERNAL_URI = 'INTERNAL_URI';
 
-    public const string LIQUIDSOAP_HOST = 'LIQUIDSOAP_HOST';
+    public const string LIQUIDSOAP_HOST = 'LIQUIDSOAP_HOST'; # Liquidsoap host/Stations host
 
     // Database and Cache Configuration Variables
     public const string DB_HOST = 'MYSQL_HOST';
@@ -237,7 +237,7 @@ final class Environment
     {
         return new Uri(Types::string(
             $this->data[self::INTERNAL_URI] ?? null,
-            'http://127.0.0.1:6010',
+            'http://web:6010',
             true
         ));
     }
@@ -246,7 +246,7 @@ final class Environment
     {
         return new Uri(Types::string(
             $this->data[self::LOCAL_URI] ?? null,
-            'http://127.0.0.1',
+            'http://stations',
             true
         ));
     }
@@ -255,7 +255,7 @@ final class Environment
     {
         $host = Types::string(
             $this->data[self::LIQUIDSOAP_HOST] ?? null,
-            'http://127.0.0.1',
+            'http://stations',
             true
         );
 

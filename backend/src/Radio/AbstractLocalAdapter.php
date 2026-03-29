@@ -215,7 +215,11 @@ abstract class AbstractLocalAdapter
                     ['station_id' => $station->id, 'station_name' => $station->name]
                 );
             } catch (SupervisorLibException $e) {
-                $this->handleSupervisorException($e, $programName, $station);
+                try {
+                    $this->handleSupervisorException($e, $programName, $station);
+                } catch (NotRunningException) {
+                    // Process is already stopped, which is fine.
+                }
             }
         }
     }
