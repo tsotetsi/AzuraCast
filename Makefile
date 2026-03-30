@@ -83,3 +83,8 @@ up-minimal:
 	@echo "$(YELLOW)ℹ️  Starting minimal services...$(NC)"
 	@docker compose up -d keydb mariadb sftpgo centrifugo web
 	@echo "$(GREEN)✅  Minimal services started...$(NC)"
+
+space:
+	@echo "$(YELLOW)ℹ️  Clean up space ...$(NC)"
+	@docker compose prune -f
+	@echo "$(GREEN)✅  Space cleaned up...$(NC)"
